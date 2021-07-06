@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
 public class Customer extends Rectangle {
 	BufferedImage pic;
 	boolean destroyed = false;
-	int time = 10;
+	int time = 5;
 	long timeChange = System.currentTimeMillis() + time*1000;
 	
 	Customer (int a, int b, int w, int h, String s) {

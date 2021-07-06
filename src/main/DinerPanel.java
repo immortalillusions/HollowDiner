@@ -13,7 +13,13 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	ArrayList <Customer> customers = new ArrayList <Customer> ();
 	ArrayList <Customer> copycustomers;
 	
-	Customer test;
+	String c = "/resources/HollowKnight.png"; 
+	String order = "/resources/order.png";
+	String s; // to get the text of the tables
+	
+	Line line = new Line(50, 300, 300, 200, "/resources/blank.png");
+	
+//	Customer test;
 	Customer customer1;
 	Customer customer2;
 	Customer customer3;
@@ -28,10 +34,6 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	Thread thread;
 	
 	int size = 250;
-	String c = "/resources/HollowKnight.png"; 
-	String order = "/resources/order.png";
-	String s; // to get the text of the tables
-	
 	
 	boolean pressed1 = false;
 	boolean pressed2 = false;
@@ -65,8 +67,8 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 		t3.addTable(550, 540, size, size, this);
 		t4.addTable(1250, 540, size, size, this);
 		
-		test = new Customer(50, 300, 100, 200, c);
-		customers.add(test);
+	//	test = new Customer(50, 300, 100, 200, c);
+	//	customers.add(test);
 		
 		addKeyListener(this);
 		setFocusable(true);
@@ -82,6 +84,7 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 		for (Customer c : copycustomers) {
 			c.draw(g, this);
 		}
+		line.draw(g, this);
 		
 		repaint();
 	}
@@ -89,6 +92,9 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	
 	
 	public void update() {
+		
+		line.updateLine();
+		line.addCount();
 		
 		for (Customer c : customers) {
 			if (c.order()) {
@@ -103,9 +109,10 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	//		System.out.println(test.x);
 	//		System.out.println(test.y);
 			
-			if (addNew1) {
+			if (addNew1 && line.count>0) {
 				customer1 = new Customer(t1.xvalue - 150, t1.yvalue + size/4, 100, 200, c);
 				customers.add(customer1);
+				line.subtractCount();
 				addNew1 = false; // only one customer per table
 			}
 			
@@ -117,9 +124,10 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	//		System.out.println(test.x);
 	//		System.out.println(test.y);
 			
-			if (addNew2) {
+			if (addNew2&& line.count>0) {
 				customer2 = new Customer(t2.xvalue - 150, t2.yvalue + size/4, 100, 200, c);
 				customers.add(customer2);
+				line.subtractCount();
 				addNew2 = false; // only one customer per table
 			}
 			
@@ -131,9 +139,10 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	//		System.out.println(test.x);
 	//		System.out.println(test.y);
 			
-			if (addNew3) {
+			if (addNew3&& line.count>0) {
 				customer3 = new Customer(t3.xvalue - 150, t3.yvalue + size/4, 100, 200, c);
 				customers.add(customer3);
+				line.subtractCount();
 				addNew3 = false; // only one customer per table
 			}
 			
@@ -145,9 +154,10 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	//		System.out.println(test.x);
 	//		System.out.println(test.y);
 			
-			if (addNew4) {
+			if (addNew4&& line.count>0) {
 				customer4 = new Customer(t4.xvalue - 150, t4.yvalue + size/4, 100, 200, c);
 				customers.add(customer4);
+				line.subtractCount();
 				addNew4 = false; // only one customer per table
 			}
 			
