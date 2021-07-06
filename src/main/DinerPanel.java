@@ -11,6 +11,8 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	
 	ArrayList <Table> tables = new ArrayList <Table> ();
 	ArrayList <Customer> customers = new ArrayList <Customer> ();
+	ArrayList <Customer> copycustomers;
+	
 	Customer test;
 	Customer customer1;
 	Customer customer2;
@@ -72,11 +74,13 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	
 	public void paintComponent (Graphics g) { 
 		super.paintComponent(g);
-		for (Customer c : customers) {
+		
+		synchronized (this) {
+			copycustomers = new ArrayList <Customer> (customers);
+		}
+		
+		for (Customer c : copycustomers) {
 			c.draw(g, this);
-			if (c.order()) {
-				c.setPic(order);
-			}
 		}
 		
 		repaint();
@@ -85,6 +89,14 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	
 	
 	public void update() {
+		
+		for (Customer c : customers) {
+			if (c.order()) {
+				c.setPic(order);
+				c.width = 150;
+			}
+		}
+		
 		if (pressed1 ==true) {
 	//		test.x = t1.xvalue - 150;
 	//		test.y = t1.yvalue + size/4;
@@ -100,24 +112,45 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 			pressed1 = false; //so it doesn't redraw
 		}
 		if (pressed2 ==true) {
-			test.x = t2.xvalue - 150;
-			test.y = t2.yvalue + size/4;
+	//		test.x = t2.xvalue - 150;
+	//		test.y = t2.yvalue + size/4;
 	//		System.out.println(test.x);
 	//		System.out.println(test.y);
+			
+			if (addNew2) {
+				customer2 = new Customer(t2.xvalue - 150, t2.yvalue + size/4, 100, 200, c);
+				customers.add(customer2);
+				addNew2 = false; // only one customer per table
+			}
+			
 			pressed2 = false;
 		}
 		if (pressed3 ==true) {
-			test.x = t3.xvalue - 150;
-			test.y = t3.yvalue + size/4;
+	//		test.x = t3.xvalue - 150;
+	//		test.y = t3.yvalue + size/4;
 	//		System.out.println(test.x);
 	//		System.out.println(test.y);
+			
+			if (addNew3) {
+				customer3 = new Customer(t3.xvalue - 150, t3.yvalue + size/4, 100, 200, c);
+				customers.add(customer3);
+				addNew3 = false; // only one customer per table
+			}
+			
 			pressed3 = false;
 		}
 		if (pressed4 ==true) {
-			test.x = t4.xvalue - 150;
-			test.y = t4.yvalue + size/4;
+	//		test.x = t4.xvalue - 150;
+	//		test.y = t4.yvalue + size/4;
 	//		System.out.println(test.x);
 	//		System.out.println(test.y);
+			
+			if (addNew4) {
+				customer4 = new Customer(t4.xvalue - 150, t4.yvalue + size/4, 100, 200, c);
+				customers.add(customer4);
+				addNew4 = false; // only one customer per table
+			}
+			
 			pressed4 = false;
 		}
 	}

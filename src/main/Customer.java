@@ -11,9 +11,8 @@ import javax.imageio.ImageIO;
 public class Customer extends Rectangle {
 	BufferedImage pic;
 	boolean destroyed = false;
-	
-	int time = 3;
-	long timeChange = System.currentTimeMillis() + time*1000; //second to millisecond
+	int time = 10;
+	long timeChange = System.currentTimeMillis() + time*1000;
 	
 	Customer (int a, int b, int w, int h, String s) {
 		x = a;
@@ -33,15 +32,15 @@ public class Customer extends Rectangle {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		this.x+=30;
 	}
 	
+	
 	public boolean order() {
+
 		if (System.currentTimeMillis() < timeChange ) {
 			return false; //break = loop, return = function/method exit
 		}
-		
-		timeChange = System.currentTimeMillis() + time*1000;
+		timeChange += time*1000;
 		return true;
 	}
 	
