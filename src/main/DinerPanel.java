@@ -97,7 +97,6 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 		
 		line.updateLine();
 		line.addCount();
-		System.out.println(line.linepic);
 		try {
 			line.pic = ImageIO.read(getClass().getResource(line.linepic)); // so it updates image
 		} catch (IOException e) {
@@ -123,6 +122,11 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 				customers.add(customer1);
 				line.subtractCount();
 				addNew1 = false; // only one customer per table
+			}
+			
+			if (addNew1 == false) {
+				customer1.addFood(); //ok doesn't work for some reason :( -> needs to update continuously
+				// similar to the line problem 
 			}
 			
 			pressed1 = false; //so it doesn't redraw

@@ -5,12 +5,12 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 
 public class Customer extends Rectangle {
 	BufferedImage pic;
 	boolean destroyed = false;
+	Food food;
 	int time = 5;
 	long timeChange = System.currentTimeMillis() + time*1000;
 	
@@ -42,6 +42,19 @@ public class Customer extends Rectangle {
 		}
 		timeChange += time*1000;
 		return true;
+	}
+	
+	public void addFood() {
+		try {
+			if (this.pic == ImageIO.read(getClass().getResource("/resources/order.png"))) {
+				pic = ImageIO.read(getClass().getResource("/resources/HollowKnight.png"));
+				this.food = new Food(this.x + 150, this.y - 250/4, 100,200); //250 = size of table
+				
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void set_to_destroyed() {
