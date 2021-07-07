@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.imageio.ImageIO;
 
@@ -13,7 +14,6 @@ public class Line extends Rectangle{
 	int count = 0;
 	BufferedImage pic;
 	String linepic;
-	Random random = new Random();
 	int when;
 	long change = System.currentTimeMillis() + when*1000;
 	
@@ -31,7 +31,7 @@ public class Line extends Rectangle{
 	}
 	
 	public void addCount () {
-		when = random.nextInt(5);
+		when = ThreadLocalRandom.current().nextInt(5, 10 + 1);
 		if (System.currentTimeMillis() < change ) {
 			return; //break = loop, return = function/method exit
 		}
@@ -54,18 +54,23 @@ public class Line extends Rectangle{
 	public void updateLine() {
 		if (count == 0) {
 			linepic = "/resources/blank.png"; 
+			width = 100;
 		}
 		if (count == 1) {
-			linepic = "/resources/HollowKnight.png"; 
+			linepic = "/resources/HollowKnight.png";
+			width = 100;
 		}
 		if (count == 2) {
 			linepic = "/resources/twoline.png"; 
+			width = 150;
 		}
 		if (count == 3) {
 			linepic = "/resources/threeline.png"; 
+			width = 200;
 		}
 		if (count == 4) {
 			linepic = "/resources/fourline.png"; 
+			width = 250;
 		}
 	}
 	

@@ -3,8 +3,10 @@ package main;
 import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.event.*;
+import java.io.IOException;
 import java.util.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class DinerPanel extends JPanel implements KeyListener, ActionListener{
@@ -17,13 +19,13 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	String order = "/resources/order.png";
 	String s; // to get the text of the tables
 	
-	Line line = new Line(50, 300, 300, 200, "/resources/blank.png");
-	
 //	Customer test;
 	Customer customer1;
 	Customer customer2;
 	Customer customer3;
 	Customer customer4;
+	
+	Line line = new Line(50, 300, 300, 200, "/resources/blank.png");
 	
 	Table t1;
 	Table t2;
@@ -91,10 +93,17 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 		
 	
 	
-	public void update() {
+	public void update() {		
 		
 		line.updateLine();
 		line.addCount();
+		System.out.println(line.linepic);
+		try {
+			line.pic = ImageIO.read(getClass().getResource(line.linepic)); // so it updates image
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		for (Customer c : customers) {
 			if (c.order()) {
