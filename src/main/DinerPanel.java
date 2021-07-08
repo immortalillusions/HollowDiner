@@ -369,7 +369,9 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 			}
 			
 		}
-		
+		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			System.exit(0);
+		}
 		
 	}
 
