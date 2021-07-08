@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.event.*;
 import java.io.IOException;
@@ -25,6 +26,8 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	Customer customer3;
 	Customer customer4;
 	
+	//Food testfood;
+	
 	Line line = new Line(50, 300, 300, 200, "/resources/blank.png");
 	
 	Table t1;
@@ -45,10 +48,17 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	boolean addNew2 = true;
 	boolean addNew3 = true;
 	boolean addNew4 = true;
+	boolean food1 = false;
+	boolean food2 = false;
+	boolean food3 = false;
+	boolean food4 = false;
 	
 	
 	DinerPanel () {
 		this.setLayout(null);
+		
+	//	testfood = new Food(250,250,250,250);
+	//	testfood.appear();
 		
 		t1 = new Table("Table 1");
 		t2 = new Table("Table 2");
@@ -85,9 +95,9 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 		
 		for (Customer c : copycustomers) {
 			c.draw(g, this);
+			c.food.draw(g, this);
 		}
 		line.draw(g, this);
-		
 		repaint();
 	}
 		
@@ -123,10 +133,16 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 				line.subtractCount();
 				addNew1 = false; // only one customer per table
 			}
-			
+
 			if (addNew1 == false) {
-				customer1.addFood(); //ok doesn't work for some reason :( -> needs to update continuously
-				// similar to the line problem 
+				System.out.println("addNew1 is false and the if statement ran");
+			
+				if (customer1.picstring == "/resources/order.png") {
+					customer1.addFood(); //FOOD DOESNT APPEAR BECAUSE IT IS BEHIND THE BUTTON!!!
+					customer1.food.appear();
+				}
+				
+				
 			}
 			
 			pressed1 = false; //so it doesn't redraw
@@ -177,8 +193,6 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 			pressed4 = false;
 		}
 	}
-	
-	
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
