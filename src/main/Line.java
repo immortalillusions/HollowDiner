@@ -31,7 +31,7 @@ public class Line extends Rectangle{
 	}
 	
 	public void addCount () {
-		when = ThreadLocalRandom.current().nextInt(5, 10 + 1);
+		when = ThreadLocalRandom.current().nextInt(3, 7 + 1);
 		if (System.currentTimeMillis() < change ) {
 			return; //break = loop, return = function/method exit
 		}

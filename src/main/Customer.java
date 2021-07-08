@@ -12,9 +12,10 @@ public class Customer extends Rectangle {
 	String picstring;
 	boolean destroyed = false;
 	boolean alreadyOrdered = false;
-	Food food;
+	boolean alreadyAte = false;
 	int time = 5;
 	long timeChange = System.currentTimeMillis() + time*1000;
+	long eatingTime;
 	
 	Customer (int a, int b, int w, int h, String s) {
 		x = a;
@@ -24,7 +25,6 @@ public class Customer extends Rectangle {
 		picstring = s;
 		try {
 			pic = ImageIO.read(getClass().getResource(s));
-			food = new Food(x + 150, y - 250/4, 1000,500); //250 = size of table
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -42,7 +42,7 @@ public class Customer extends Rectangle {
 	
 	public boolean order() {
 		
-		if (alreadyOrdered == false) {
+		if (alreadyOrdered == false && alreadyAte == false) {
 		
 			if (System.currentTimeMillis() < timeChange ) {
 				return false; //break = loop, return = function/method exit
@@ -53,15 +53,23 @@ public class Customer extends Rectangle {
 		} else return false;
 	}
 	
+	public boolean eat() {
+		
+		if (alreadyOrdered == true && alreadyAte == false) {
+		
+			if (System.currentTimeMillis() < eatingTime ) {
+				return false; //break = loop, return = function/method exit
+			}
+			alreadyAte = true;
+			return true;
+		} else return false;
+	}
+	
 	public void addFood() {
 		try {
-	//		if (this.picstring == "/resources/order.png") {
 				pic = ImageIO.read(getClass().getResource("/resources/HollowKnight.png"));
 				this.width = 100;
-		//		this.food.appear();
 				this.alreadyOrdered = true;
-				System.out.println("if statement worked");
-	//		} else System.out.println("if statement did not work");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
