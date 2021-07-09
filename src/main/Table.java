@@ -3,6 +3,7 @@ package main;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 
 import javax.swing.*;
 
@@ -10,6 +11,11 @@ public class Table extends JButton {
 	String text;
 	int xvalue;
 	int yvalue;
+	boolean pressed = false;
+	boolean addNew = true;
+	boolean clicked = false;
+	Customer customer;
+	BufferedImage tableimage;
 	
 	public Table(String string) {
 		// TODO Auto-generated constructor stub
