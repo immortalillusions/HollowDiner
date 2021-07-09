@@ -1,12 +1,11 @@
 package main;
 
-public class AnimateDiner implements Runnable{
-	
+public class timer implements Runnable{
 	DinerPanel dp;
 	boolean isOver = false;
 	boolean isPaused = false;
 	
-	AnimateDiner (DinerPanel b) { //constructor
+	timer (DinerPanel b) { //constructor
 		dp = b;
 		}
 	@Override
@@ -14,9 +13,9 @@ public class AnimateDiner implements Runnable{
 		// TODO Auto-generated method stub
 		while (!isOver) { //change true to when lost = false bp.lost=false
 			if (!isPaused) {
-				dp.update();
+				dp.startTimer();
 				try {
-					Thread.sleep(10);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -25,5 +24,4 @@ public class AnimateDiner implements Runnable{
 		}
 		
 	}
-	
 }

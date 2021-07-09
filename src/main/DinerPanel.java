@@ -1,7 +1,9 @@
 package main;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -17,6 +19,10 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	ArrayList <Customer> customers = new ArrayList <Customer> ();
 	ArrayList <Customer> copycustomers;
 	
+	long timer;
+	long timeLeft;
+	long start = 0;
+	
 	String c = "/resources/HollowKnight.png"; 
 	String order = "/resources/order.png";
 	String s; // to get the text of the tables
@@ -29,7 +35,7 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	
 	//Food testfood;
 	
-	Line line = new Line(50, 300, 300, 200, "/resources/blank.png");
+	Line line = new Line (0, 0, 0, 0, "/resources/blank.png");
 	
 	Table t1;
 	Table t2;
@@ -42,9 +48,14 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	BufferedImage tableimage4;
 	
 	AnimateDiner animate;
+	timer TIMER;
+	Thread timerthread;
 	Thread thread;
 	
 	int size = 250;
+	
+	JLabel score;
+	int points = 0;
 	
 	boolean started = false;
 	boolean pressed1 = false;
@@ -64,6 +75,15 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	DinerPanel () {
 		this.setLayout(null);
 		
+		score = new JLabel();
+		score.setBounds(1750, 0, 150, 150);
+		score.setOpaque(true);
+		score.setText("<html>5 minutes<br/>Goal: 20<br/>" + 
+				"Current Score: 0</html>");
+		score.setFont(new Font("Verdana",Font.BOLD,20));
+		score.setBackground(Color.white);
+		score.setVisible(true);
+		this.add(score);
 	//	testfood = new Food(250,250,250,250);
 	//	testfood.appear();
 		
@@ -120,10 +140,15 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 		repaint();
 	}
 		
-	
+	public void startTimer() {
+		if (timer - System.currentTimeMillis() >= 0) { 
+			timeLeft =timer - System.currentTimeMillis();
+		}
+	}
 	
 	public void update() {		
-		
+		score.setText("<html>"+ (int)(timeLeft/1000)+ " seconds<br/>Goal: 20<br/>" + 
+				"Current Score: " + points + "</html>");
 		line.updateLine();
 		line.addCount();
 		if (customer1!=null && customer1.eat()) {
@@ -219,6 +244,7 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 								e.printStackTrace();
 							}
 							t1.setIcon(new ImageIcon(tableimage1));
+							points++;
 						}
 						
 					}
@@ -263,6 +289,7 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 						e.printStackTrace();
 					}
 					t2.setIcon(new ImageIcon(tableimage2));
+					points++;
 				}
 			}
 			
@@ -306,6 +333,7 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 						e.printStackTrace();
 					}
 					t3.setIcon(new ImageIcon(tableimage3));
+					points++;
 				}
 			}
 			pressed3 = false;
@@ -347,6 +375,7 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 						e.printStackTrace();
 					}
 					t4.setIcon(new ImageIcon(tableimage4));
+					points++;
 				}
 			}
 			pressed4 = false;
@@ -360,18 +389,29 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 			if (!started) {
 				animate = new AnimateDiner(this);
 				thread = new Thread(animate);
-				
+				line = new Line(50, 300, 300, 200, "/resources/blank.png");
 				for (int i = 0; i<4; i++) {
 					line.subtractCount();
-				}				
+				}			
+				line.when = 5*1000;
 				thread.start(); //calls run()
 				started = true;
+				
+				TIMER = new timer(this);
+				timerthread = new Thread(TIMER);
+				timer= System.currentTimeMillis() + 5*60*1000;
+				timerthread.start();	
+				
 			}
 			
 		}
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			System.exit(0);
 		}
+	/*	if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			DinerPanel d = new DinerPanel();
+			this.dispose();
+		} */
 		
 	}
 
