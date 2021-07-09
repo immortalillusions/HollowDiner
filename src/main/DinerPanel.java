@@ -76,7 +76,7 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 		this.setLayout(null);
 		
 		score = new JLabel();
-		score.setBounds(1750, 0, 150, 150);
+		score.setBounds(1700, 0, 200, 150);
 		score.setOpaque(true);
 		score.setText("<html>5 minutes<br/>Goal: 20<br/>" + 
 				"Current Score: 0</html>");
