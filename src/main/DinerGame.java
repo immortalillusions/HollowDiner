@@ -16,8 +16,8 @@ public class DinerGame {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		frame.setSize(1920,1080);
-		frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
-		frame.setUndecorated(true);
+	//	frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+	//	frame.setUndecorated(true);
 		
 		frame.setResizable(false);
 		frame.setVisible(true);

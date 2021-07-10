@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -22,6 +23,11 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	long timer;
 	long timeLeft;
 	long start = 0;
+	
+	int minutes = 1;
+	
+	boolean isOver = false;
+	boolean isPaused = false;
 	
 	String c = "/resources/HollowKnight.png"; 
 	String order = "/resources/order.png";
@@ -48,14 +54,16 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	JLabel score;
 	int points = 0;
 	
+	Color colour = new Color(156, 234, 239);
+	
 	boolean started = false;
 	
 	DinerPanel () {
 		this.setLayout(null);
-		
+		this.setBackground(colour);
 		score = new JLabel();
 		score.setBounds(1700, 0, 200, 150);
-		score.setOpaque(true);
+		score.setOpaque(false);
 		score.setText("<html>5 minutes<br/>Goal: 20<br/>" + 
 				"Current Score: 0</html>");
 		score.setFont(new Font("Verdana",Font.BOLD,20));
@@ -100,9 +108,15 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 		setFocusable(true);
 	}
 	
+	public BufferedImage resizeImage(BufferedImage originalImage, int targetWidth, int targetHeight) throws IOException {
+	    Image resultingImage = originalImage.getScaledInstance(targetWidth, targetHeight, Image.SCALE_DEFAULT);
+	    BufferedImage outputImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_RGB);
+	    outputImage.getGraphics().drawImage(resultingImage, 0, 0, null);
+	    return outputImage;
+	}
+	
 	public void paintComponent (Graphics g) { 
 		super.paintComponent(g);
-		
 		synchronized (this) {
 			copycustomers = new ArrayList <Customer> (customers);
 		}
@@ -118,6 +132,9 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 		if (timer - System.currentTimeMillis() >= 0) { 
 			timeLeft =timer - System.currentTimeMillis();
 		}
+		else {
+			isOver = true;
+		}
 	}
 	
 	public void update() {		
@@ -125,7 +142,7 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 				"Current Score: " + points + "</html>");
 		line.updateLine();
 		line.addCount();
-	
+				
 		try {
 			line.pic = ImageIO.read(getClass().getResource(line.linepic)); // so it updates image
 		} catch (IOException e) {
@@ -214,7 +231,7 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 				
 				TIMER = new timer(this);
 				timerthread = new Thread(TIMER);
-				timer= System.currentTimeMillis() + 5*60*1000;
+				timer= System.currentTimeMillis() + minutes*60*1000;
 				timerthread.start();	
 				
 			}
