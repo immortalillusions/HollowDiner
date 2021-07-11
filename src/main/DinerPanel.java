@@ -23,15 +23,14 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	long timer;
 	long timeLeft;
 	long start = 0;
-	
-	int minutes = 1;
-	
+
 	boolean isOver = false;
 	boolean isPaused = false;
 	
 	String c = "/resources/HollowKnight.png"; 
 	String order = "/resources/order.png";
 	String s; // to get the text of the tables
+	String status = "didn't work";
 	
 //	Customer test;
 	
@@ -52,24 +51,38 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	int size = 250;
 	
 	JLabel score;
+	JLabel end;
 	int points = 0;
+	int goal = 12;
+	int minutes = 1;
 	
 	Color colour = new Color(156, 234, 239);
+	Color colour2 = new Color(88, 153, 226);
+	Color colour3 = new Color(134, 180, 234);
 	
 	boolean started = false;
 	
 	DinerPanel () {
 		this.setLayout(null);
 		this.setBackground(colour);
+		end = new JLabel();
 		score = new JLabel();
 		score.setBounds(1700, 0, 200, 150);
 		score.setOpaque(false);
-		score.setText("<html>5 minutes<br/>Goal: 20<br/>" + 
+		score.setText("<html>1 minute<br/>Goal: "+goal+"<br/>" + 
 				"Current Score: 0</html>");
 		score.setFont(new Font("Verdana",Font.BOLD,20));
 		score.setBackground(Color.white);
 		score.setVisible(true);
+		end.setBounds(860, 390, 200, 150);
+		end.setOpaque(true);
+		end.setText("<html><div style='text-align: center;'>You got a score of "+points+"<br/>" + 
+				"You " + status + "</div><html>");
+		end.setFont(new Font("Verdana",Font.BOLD,20));
+		end.setBackground(colour3);
+		end.setVisible(false);
 		this.add(score);
+		this.add(end);
 	//	testfood = new Food(250,250,250,250);
 	//	testfood.appear();
 		
@@ -131,8 +144,30 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 		}
 	}
 	
+	public void end() {
+		if (isOver == true) {
+			System.out.println("it's over");
+			
+			if (goal<=points) {
+				status = "WON :D";
+				System.out.println(goal);
+				System.out.println(points);
+			}
+			else {
+				status = "LOST :(";
+				System.out.println(goal);
+				System.out.println(points);
+				
+			}
+			end.setText("<html><div style='text-align: center;'>You got a score of "+points+"<br/>" + 
+					"You " + status + "<br/>Press ENTER to play again!</div><html>");	
+			end.setVisible(true);
+		}
+	}
+	
 	public void update() {		
-		score.setText("<html>"+ (int)(timeLeft/1000)+ " seconds<br/>Goal: 20<br/>" + 
+//		isOver=true;
+		score.setText("<html>"+ (int)(timeLeft/1000)+ " seconds<br/>Goal: "+goal+"<br/>" + 
 				"Current Score: " + points + "</html>");
 		line.updateLine();
 		line.addCount();
@@ -205,7 +240,7 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 					}
 		}
 		
-
+		end();
 	}
 	
 	@Override
