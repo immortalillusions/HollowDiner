@@ -22,10 +22,11 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	
 	long timer;
 	long timeLeft;
-	long start = 0;
 
 	boolean isOver = false;
 	boolean isPaused = false;
+	boolean restart = false;
+	boolean frame = false;
 	
 	String c = "/resources/HollowKnight.png"; 
 	String order = "/resources/order.png";
@@ -74,7 +75,7 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 		score.setFont(new Font("Verdana",Font.BOLD,20));
 		score.setBackground(Color.white);
 		score.setVisible(true);
-		end.setBounds(860, 390, 200, 150);
+		end.setBounds(860, 365, 200, 200);
 		end.setOpaque(true);
 		end.setText("<html><div style='text-align: center;'>You got a score of "+points+"<br/>" + 
 				"You " + status + "</div><html>");
@@ -134,7 +135,77 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 		line.draw(g, this);
 		repaint();
 	}
+	
+	public void restart() {
+		customers.clear();
+		copycustomers.clear();
+		line = new Line(50, 300, 300, 200, "/resources/blank.png");
+		for (int i = 0; i<4; i++) {
+			line.subtractCount();
+		}			
+		line.when = 5*1000;
+
+		isOver = false;
+		isPaused = false;
+		restart = false;
 		
+		points = 0;
+		minutes = 1;
+		
+		end.setVisible(false);
+		score.setText("<html>1 minute<br/>Goal: "+goal+"<br/>" + 
+				"Current Score: 0</html>");
+		
+		System.out.println("it cleared");
+		
+		for (Table t: tables) {
+			try {
+				t.tableimage = ImageIO.read(getClass().getResource("/resources/table2.png"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			t.setIcon(new ImageIcon(t.tableimage)); 
+
+		}
+		this.revalidate();
+		this.repaint();
+/*		for (Table t: tables) {
+			t.removeTable(this);
+			t = null;
+		}
+		
+		tables.clear();
+		t1 = new Table("Table 1");
+		t2 = new Table("Table 2");
+		t3 = new Table("Table 3");
+		t4 = new Table("Table 4");
+		tables.add(t1);
+		tables.add(t2);
+		tables.add(t3);
+		tables.add(t4);
+		
+		for (Table t: tables) {
+			t.addActionListener(this);
+			s = t.getText();
+			t.setActionCommand(s);
+			try {
+				t.tableimage = ImageIO.read(getClass().getResource("/resources/table2.png"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			t.setIcon(new ImageIcon(t.tableimage)); 
+
+		}
+		
+		t1.addTable(550, 100, size, size, this);
+		t2.addTable(1250, 100, size, size, this);
+		t3.addTable(550, 540, size, size, this);
+		t4.addTable(1250, 540, size, size, this); */
+		System.out.println("it finished restarting");
+	}
+	
 	public void startTimer() {
 		if (timer - System.currentTimeMillis() >= 0) { 
 			timeLeft =timer - System.currentTimeMillis();
@@ -147,7 +218,7 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	public void end() {
 		if (isOver == true) {
 			System.out.println("it's over");
-			
+			restart = true;
 			if (goal<=points) {
 				status = "WON :D";
 				System.out.println(goal);
@@ -160,13 +231,14 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 				
 			}
 			end.setText("<html><div style='text-align: center;'>You got a score of "+points+"<br/>" + 
-					"You " + status + "<br/>Press ENTER to play again!</div><html>");	
+					"You " + status + "<br/>Press ESC to exit or ENTER to play again!</div><html>");	
 			end.setVisible(true);
 		}
 	}
 	
 	public void update() {		
-//		isOver=true;
+	//	isOver=true;
+	//	System.out.println("is updating");
 		score.setText("<html>"+ (int)(timeLeft/1000)+ " seconds<br/>Goal: "+goal+"<br/>" + 
 				"Current Score: " + points + "</html>");
 		line.updateLine();
@@ -260,19 +332,30 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 				
 				TIMER = new timer(this);
 				timerthread = new Thread(TIMER);
-				timer= System.currentTimeMillis() + minutes*60*1000;
+		//		timer= System.currentTimeMillis() + minutes*60*1000;
+				timer= System.currentTimeMillis() + minutes*6*1000; //for testing purposes
 				timerthread.start();	
+				System.out.println("thread ran");
 				
+			}
+			if(isOver) {
+				isOver = false;
+				restart();
+				System.out.println("it restarted");
+				
+				System.out.println(isOver);
 			}
 			
 		}
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			System.exit(0);
 		}
-	/*	if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			DinerPanel d = new DinerPanel();
-			this.dispose();
-		} */
+		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			frame = true;
+			System.out.println("frame is true");
+		//	DinerPanel d = new DinerPanel();
+		//	this.dispose();
+		} 
 		
 	}
 
@@ -293,6 +376,7 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+	if (isOver) {
 		String action = e.getActionCommand();
         if (action.equals("Table 1")) {
             System.out.println("Button1 pressed!");
@@ -310,6 +394,8 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
             System.out.println("Button4 pressed!");
             t4.pressed = true;
         }
+	}
+		
 	}
 
 }

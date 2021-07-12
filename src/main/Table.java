@@ -35,4 +35,9 @@ public class Table extends JButton {
 		yvalue = y;
 	}
 	
+	public void removeTable(JPanel p) {
+		p.remove(this);
+	}
+	
+	
 }

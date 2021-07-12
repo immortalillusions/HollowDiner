@@ -32,7 +32,7 @@ public class Line extends Rectangle{
 	
 	public void addCount () {
 		when = ThreadLocalRandom.current().nextInt(1, 5 + 1);
-		if (System.currentTimeMillis() < change ) {
+		if (System.currentTimeMillis() <= change ) {
 			return; //break = loop, return = function/method exit
 		}
 		change += when*1000;
