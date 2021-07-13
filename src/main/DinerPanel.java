@@ -19,6 +19,7 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	ArrayList <Table> tables = new ArrayList <Table> ();
 	ArrayList <Customer> customers = new ArrayList <Customer> ();
 	ArrayList <Customer> copycustomers;
+	ArrayList<Customer> copycustomers1;
 	
 	long timer;
 	long timeLeft;
@@ -26,7 +27,6 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	boolean isOver = false;
 	boolean isPaused = false;
 	boolean restart = false;
-	boolean frame = false;
 	
 	String c = "/resources/HollowKnight.png"; 
 	String order = "/resources/order.png";
@@ -139,6 +139,7 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	public void restart() {
 		customers.clear();
 		copycustomers.clear();
+		copycustomers1.clear();
 		line = new Line(50, 300, 300, 200, "/resources/blank.png");
 		for (int i = 0; i<4; i++) {
 			line.subtractCount();
@@ -159,6 +160,15 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 		System.out.println("it cleared");
 		
 		for (Table t: tables) {
+			//IMPORTANT: RESET VALUES FOR ALL T.CUSTOMER
+			t.addNew = true;
+			t.pressed = false;
+			t.clicked = false;
+			t.customer.setPic(c);
+			t.customer.destroyed = false;
+			t.customer.alreadyAte = false;
+			t.customer.alreadyOrdered = false;
+			customers.add(t.customer);
 			try {
 				t.tableimage = ImageIO.read(getClass().getResource("/resources/table2.png"));
 			} catch (IOException e) {
@@ -168,41 +178,10 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 			t.setIcon(new ImageIcon(t.tableimage)); 
 
 		}
+		customers.clear();
 		this.revalidate();
 		this.repaint();
-/*		for (Table t: tables) {
-			t.removeTable(this);
-			t = null;
-		}
-		
-		tables.clear();
-		t1 = new Table("Table 1");
-		t2 = new Table("Table 2");
-		t3 = new Table("Table 3");
-		t4 = new Table("Table 4");
-		tables.add(t1);
-		tables.add(t2);
-		tables.add(t3);
-		tables.add(t4);
-		
-		for (Table t: tables) {
-			t.addActionListener(this);
-			s = t.getText();
-			t.setActionCommand(s);
-			try {
-				t.tableimage = ImageIO.read(getClass().getResource("/resources/table2.png"));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			t.setIcon(new ImageIcon(t.tableimage)); 
 
-		}
-		
-		t1.addTable(550, 100, size, size, this);
-		t2.addTable(1250, 100, size, size, this);
-		t3.addTable(550, 540, size, size, this);
-		t4.addTable(1250, 540, size, size, this); */
 		System.out.println("it finished restarting");
 	}
 	
@@ -216,6 +195,7 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	}
 	
 	public void end() {
+//		System.out.println(isOver);
 		if (isOver == true) {
 			System.out.println("it's over");
 			restart = true;
@@ -239,6 +219,7 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	public void update() {		
 	//	isOver=true;
 	//	System.out.println("is updating");
+		end();
 		score.setText("<html>"+ (int)(timeLeft/1000)+ " seconds<br/>Goal: "+goal+"<br/>" + 
 				"Current Score: " + points + "</html>");
 		line.updateLine();
@@ -250,8 +231,10 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		for (Customer c : customers) {
+		synchronized (this) {
+			copycustomers1 = new ArrayList <Customer> (customers);
+		}
+		for (Customer c : copycustomers1) {
 			if (c.order()) {
 				c.setPic(order);
 				c.width = 150;
@@ -333,13 +316,30 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 				TIMER = new timer(this);
 				timerthread = new Thread(TIMER);
 		//		timer= System.currentTimeMillis() + minutes*60*1000;
-				timer= System.currentTimeMillis() + minutes*6*1000; //for testing purposes
+				timer= System.currentTimeMillis() + minutes*60*1000; //for testing purposes
 				timerthread.start();	
 				System.out.println("thread ran");
 				
 			}
 			if(isOver) {
 				isOver = false;
+				//NEW THREADS ARE CREATED BECAUSE NO WHILE (TRUE) LOOP IN THREADS SO WHEN IF/WHILE 
+				//STATEMENT IS FALSE THE THREAD DIES (FOR SOME REASON WHILE LOOP CAUSES ERRORS)
+				animate = new AnimateDiner(this);
+				thread = new Thread(animate);
+				line = new Line(50, 300, 300, 200, "/resources/blank.png");
+				for (int i = 0; i<4; i++) {
+					line.subtractCount();
+				}			
+				line.when = 5*1000;
+				thread.start(); //calls run()
+				started = true;
+				
+				TIMER = new timer(this);
+				timerthread = new Thread(TIMER);
+				timer= System.currentTimeMillis() + minutes*60*1000;
+		//		timer= System.currentTimeMillis() + minutes*6*1000; //for testing purposes
+				timerthread.start();	
 				restart();
 				System.out.println("it restarted");
 				
@@ -351,10 +351,7 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 			System.exit(0);
 		}
 		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			frame = true;
-			System.out.println("frame is true");
-		//	DinerPanel d = new DinerPanel();
-		//	this.dispose();
+
 		} 
 		
 	}
@@ -376,7 +373,7 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-	if (isOver) {
+	if (!isOver) {
 		String action = e.getActionCommand();
         if (action.equals("Table 1")) {
             System.out.println("Button1 pressed!");
