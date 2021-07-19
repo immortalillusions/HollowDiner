@@ -54,7 +54,7 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	JLabel score;
 	JLabel end;
 	int points = 0;
-	int goal = 12;
+	int goal = 15;
 	int minutes = 1;
 	
 	Color colour = new Color(156, 234, 239);
@@ -68,20 +68,21 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 		this.setBackground(colour);
 		end = new JLabel();
 		score = new JLabel();
-		score.setBounds(1700, 0, 200, 150);
+		score.setBounds(100, 0, 200, 150);
 		score.setOpaque(false);
 		score.setText("<html>1 minute<br/>Goal: "+goal+"<br/>" + 
 				"Current Score: 0</html>");
 		score.setFont(new Font("Verdana",Font.BOLD,20));
 		score.setBackground(Color.white);
 		score.setVisible(true);
-		end.setBounds(860, 365, 200, 200);
+		end.setBounds(860, 315, 300, 300);
 		end.setOpaque(true);
-		end.setText("<html><div style='text-align: center;'>You got a score of "+points+"<br/>" + 
-				"You " + status + "</div><html>");
+		end.setText("<html><div style='text-align: center;'>Press ENTER to start.<br/>"
+				+ "Click the tables to seat, serve, and clean up after the vessels.<br/>"+
+				"Feed enough to win!"+"</div><html>");
 		end.setFont(new Font("Verdana",Font.BOLD,20));
 		end.setBackground(colour3);
-		end.setVisible(false);
+		end.setVisible(true);
 		this.add(score);
 		this.add(end);
 	//	testfood = new Food(250,250,250,250);
@@ -303,6 +304,7 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 		// TODO Auto-generated method stub
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			if (!started) {
+				end.setVisible(false);
 				animate = new AnimateDiner(this);
 				thread = new Thread(animate);
 				line = new Line(50, 300, 300, 200, "/resources/blank.png");
