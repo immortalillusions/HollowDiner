@@ -4,17 +4,24 @@ import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
-public class DinerGame {
-	public static void main (String[] args) {
+public class DinerGame extends JFrame{
+	JPanel p;
+	boolean youtube = false;
+	public void setJPanel(JPanel jp) {
+		p = jp;
+	}
+	public void setTrue () {
+		youtube = true;
+	}
+/*	public static void main (String[] args) {
 		JFrame frame = new JFrame("Hollow Diner");
 		DinerPanel panel = new DinerPanel();
-	//	mediaPlayer player = new mediaPlayer("file:///C:/Users/youth/eclipse-workspace/Diner/src/resources/Tutorial2.mpeg");
 
 		panel.setLayout(new BorderLayout());
 
 		frame.getContentPane().add(panel);
-	//	frame.getContentPane().add(player);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		frame.setSize(1920,1080);
@@ -24,5 +31,5 @@ public class DinerGame {
 		frame.setResizable(false);
 		frame.setVisible(true);
 		
-	}
+	} */
 }

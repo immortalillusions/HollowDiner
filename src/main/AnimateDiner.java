@@ -1,16 +1,21 @@
 package main;
 
+import javax.swing.JFrame;
+
+import chrriis.dj.nativeswing.swtimpl.NativeInterface;
+
 public class AnimateDiner implements Runnable{
 	
 	DinerPanel dp;
+	DinerGame f;
 	
-	AnimateDiner (DinerPanel b) { //constructor
+	AnimateDiner (DinerPanel b, DinerGame f) { //constructor
 		dp = b;
+		this.f = f;
 		}
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-
 			while (!dp.isOver) { //change true to when lost = false bp.lost=false
 				if (!dp.isPaused) {
 					dp.update();
@@ -22,6 +27,11 @@ public class AnimateDiner implements Runnable{
 					} */
 				}
 				
+			}
+			dp.end();
+			if (dp.isOver) {
+			//	f.add(f.p); has to occur in main thread
+				f.setTrue();
 			}
 		
 		

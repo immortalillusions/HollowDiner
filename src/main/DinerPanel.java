@@ -21,6 +21,8 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 	ArrayList <Customer> copycustomers;
 	ArrayList<Customer> copycustomers1;
 	
+//	YouTubeViewer yt = new YouTubeViewer();
+	
 	long timer;
 	long timeLeft;
 
@@ -305,7 +307,7 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			if (!started) {
 				end.setVisible(false);
-				animate = new AnimateDiner(this);
+				animate = new AnimateDiner(this, (DinerGame) SwingUtilities.getWindowAncestor(this));
 				thread = new Thread(animate);
 				line = new Line(50, 300, 300, 200, "/resources/blank.png");
 				for (int i = 0; i<4; i++) {
@@ -327,7 +329,7 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 				isOver = false;
 				//NEW THREADS ARE CREATED BECAUSE NO WHILE (TRUE) LOOP IN THREADS SO WHEN IF/WHILE 
 				//STATEMENT IS FALSE THE THREAD DIES (FOR SOME REASON WHILE LOOP CAUSES ERRORS)
-				animate = new AnimateDiner(this);
+				animate = new AnimateDiner(this, (DinerGame) SwingUtilities.getWindowAncestor(this));
 				thread = new Thread(animate);
 				line = new Line(50, 300, 300, 200, "/resources/blank.png");
 				for (int i = 0; i<4; i++) {
@@ -351,13 +353,18 @@ public class DinerPanel extends JPanel implements KeyListener, ActionListener{
 		}
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			System.exit(0);
+			System.out.println("made it into escape");
 		}
-		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-
+	}
+/*		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			System.out.println("made it into space keypressed in dinerpanel");
+			this.removeVideo((JFrame) SwingUtilities.getWindowAncestor(this), YouTubeViewer.returnThis());
 		} 
 		
 	}
-
+	public void removeVideo(JFrame f, JPanel p) {
+		f.remove(p);
+	} */
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 		// TODO Auto-generated method stub
